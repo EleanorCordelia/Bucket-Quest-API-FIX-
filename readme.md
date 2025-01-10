@@ -111,11 +111,129 @@ API ini akan mengembalikan kode kesalahan berikut jika terjadi masalah:
   "password": "string"
 }
 
+```
+
 ### Success Response (201 Created)
 ```json
 {
   "message": "Login berhasil",
   "token": "YOUR_JWT_TOKEN"
 }
+```
+
+### Error Response (400 Bad Request)
+```json
+{
+  "message": "Invalid credentials"
+}
+
+```
+
+## Activity
+
+### Success Response (200 OK)
+```json
+{
+  "id": 1,
+  "name": "Sample Activity"
+}
+
+```
+
+## Booking
+
+### Request Body
+```json
+{
+  "contactName": "string",
+  "contactEmail": "string",
+  "contactPhone": "string",
+  "packageId": 0,
+  "participants": 0,
+  "date": "string"
+}
+
+```
+
+### Success Response (200 OK)
+```json
+{
+  "id": 123,
+  "contactName": "string",
+  "contactEmail": "string",
+  "contactPhone": "string",
+  "packageId": 0,
+  "participants": 0,
+  "date": "string"
+}
+```
+
+## Package
+
+### Success Response (200 OK)
+```json
+[
+  {
+    "id": 1,
+    "name": "Sample Package",
+    "trips": [
+      {
+        "id": 1,
+        "name": "Trip 1",
+        "description": "Exciting Trip",
+        "price": 100
+      }
+    ]
+  }
+]
+
+```
+
+## Package Search
+
+### Query Parameters
+**name**: string
+**location**: string
+**budget**: integer
+**activity_type**: string
+**participants**: integer
+
+### Success Response (200 OK)
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Sample Package",
+    "location": "Sample Location",
+    "budget": 1000,
+    "activity_type": "Adventure",
+    "participants": 2
+  }
+]
+
+```
+
+## Package by ID
+
+### Path Parameter
+**id**: integer (required)
+
+### Success Response (200 OK)
+
+```json
+{
+  "id": 1,
+  "name": "Sample Package",
+  "trips": [
+    {
+      "id": 1,
+      "name": "Trip 1",
+      "description": "Exciting Trip",
+      "price": 100
+    }
+  ]
+}
 
 
+```
