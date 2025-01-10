@@ -102,11 +102,20 @@ API ini akan mengembalikan kode kesalahan berikut jika terjadi masalah:
 
 # API Documentation
 
-## User Registration Response
+## User Log In
+
+### Request Body
+```json
+{
+  "email": "string",
+  "password": "string"
+}
 
 ### Success Response (201 Created)
 ```json
 {
-  "message": "User registered successfully"
+  "message": "Login berhasil",
+  "token": "YOUR_JWT_TOKEN"
 }
+
 
