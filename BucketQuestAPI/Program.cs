@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.CodeAnalysis.Options;
 using MartinCostello.OpenApi;
 using System.Text.Json.Serialization;
+using BucketQuestAPI.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,7 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi( opt => {
+    opt.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
 builder.Services.AddOpenApiExtensions(options => options.AddServerUrls = true);
 builder.Services.AddAppServices(builder.Configuration);
 
@@ -24,6 +27,7 @@ builder.Services.AddDbContext<DataContext>(opt =>
 });
 
 builder.Services.AddIdentityService(builder.Configuration);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -53,5 +57,6 @@ var logger = services.GetRequiredService<ILogger<Program>>();
 logger.LogInformation(builder.Configuration.GetConnectionString("DefaultConnection")); 
 logger.LogInformation(builder.Configuration["GoogleClientId"]);
 logger.LogInformation(builder.Configuration["GoogleClientSecret"]);
-
+var context = services.GetRequiredService<DataContext>();
+// await Seed.SeedTrip(context);
 app.Run();

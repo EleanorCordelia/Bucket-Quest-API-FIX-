@@ -1,48 +1,98 @@
+using AutoMapper;
 using BucketQuestAPI.Data;
 using BucketQuestAPI.DTOs;
 using BucketQuestAPI.Entities;
+using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 namespace BucketQuestAPI.Controllers;
 
-public class PackageController : BaseApiController
+[Authorize]
+public class PackageController : BaseApiController 
 {
-    private readonly ILogger<PackageController> _logger;
     private readonly DataContext _context;
-
-    public PackageController(ILogger<PackageController> logger, DataContext context)
+    private readonly ILogger<PackageController> _logger;
+    private readonly IMapper _mapper;
+    public PackageController(DataContext context, ILogger<PackageController> logger, IMapper mapper)
     {
-        _logger = logger;
         _context = context;
+        _logger = logger;
+        _mapper = mapper;
     }
-
-    [HttpGet(Name = "Search")]
-    public IEnumerable<Package> Get(PackageSearchDto packageSearchDto)
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<TripPackage>>> GetPackages()
     {
-        IQueryable<Package> query = _context.Packages;
-        if (packageSearchDto.Location != null)
-            query = query.Where( p => p.Location.Name != null ? p.Location.Name.ToLower().Contains(packageSearchDto.Location.ToLower()) : false);
-        if (packageSearchDto.Activity != null)
-            query = query.Where( p => p.Activity.Name != null ? p.Activity.Name.ToLower().Contains(packageSearchDto.Activity.ToLower()) : false);
-        if (packageSearchDto.MinPrice != null)
-            query = query.Where( p => p.Price >= packageSearchDto.MinPrice);
-        if (packageSearchDto.MaxPrice != null)
-            query = query.Where( p => p.Price <= packageSearchDto.MaxPrice);
-        if (packageSearchDto.MinParticipantLimit != null)
-            query = query.Where( p => p.ParticipantLimit >= packageSearchDto.MinParticipantLimit);
-        if (packageSearchDto.MaxParticipantLimit != null)
-            query = query.Where( p => p.ParticipantLimit <= packageSearchDto.MaxParticipantLimit);
-        if (packageSearchDto.DataRangeStart != null)
-            query = query.Where( p => p.DataRangeStart <= packageSearchDto.DataRangeStart);
-        if (packageSearchDto.DataRangeEnd != null)
-            query = query.Where( p => p.DataRangeEnd >= packageSearchDto.DataRangeEnd);
-        if (packageSearchDto.ActivityTimeStart != null)
-            query = query.Where( p => p.ActivityTimeStart <= packageSearchDto.ActivityTimeStart);
-        if (packageSearchDto.ActivityTimeEnd != null)
-            query = query.Where( p => p.ActivityTimeEnd >= packageSearchDto.ActivityTimeEnd);
-        if (packageSearchDto.MinDifficulty != null)
-            query = query.Where( p => p.Difficulty >= packageSearchDto.MinDifficulty);
-        if (packageSearchDto.MaxDifficulty != null)
-            query = query.Where( p => p.Difficulty <= packageSearchDto.MaxDifficulty);
-        return query.ToList();
+        _logger.LogInformation("Getting all packages");
+        var packages = await _context.TripPackages.ToListAsync();
+        for (int i = 0; i < packages.Count; i++)
+        {
+            _context.Entry(packages[i]).Collection(t => t.Trips)
+                .Query()
+                .OrderByDescending( t => t.Id ).Take(1)
+                .Include(t => t.Photos)
+                .Include(t => t.ActivityTypes)
+                .Load();
+        }
+        return Ok(packages);
+    }
+    [HttpGet("search")]
+    public async Task<ActionResult<PackageResponseDto>> SearchPackages(PackageSearchDto _dto)
+    {
+        _logger.LogInformation("Searching packages");
+        var packagesQ = _context.TripPackages.AsQueryable();
+        if (_dto.Location != null)
+        {
+            packagesQ = packagesQ.Where(p => p.Location.ToLower().Contains(_dto.Location.ToLower()));
+        }
+        _logger.LogInformation("Parameters are: " + _dto.Name + " " + _dto.Location + " " + _dto.Budget + " " + _dto.ActivityType + " " + _dto.Participants);
+        if (_dto.Name != null)
+        {
+            packagesQ = packagesQ.Where(p => p.Name.ToLower().Contains(_dto.Name.ToLower()));
+        }
+        var packages = await packagesQ.Include(t => t.Trips).ThenInclude(t => t.Photos).Include(t => t.Trips).ThenInclude(t => t.ActivityTypes).ToListAsync();
+        var OkPackages = new List<TripPackage>();
+        for (int i = 0; i < packages?.Count; i++)
+        {
+            var sum = 0;
+            var ActivityExists = false;
+            for (int j = 0; j < packages?[i]?.Trips?.Count; j++)
+            {
+                sum += packages[i]?.Trips?[j].Price ?? 0;
+                
+                if (_dto.ActivityType != null &&  (packages[i]?.Trips?[j]?.ActivityTypes?.Any( a => a.Id == _dto.ActivityType) ?? false))
+                {
+                    ActivityExists = true;
+                }
+            }
+            if (_dto.Budget != null && sum * _dto.Participants <= _dto.Budget && _dto.ActivityType != null && ActivityExists)
+            {
+                OkPackages.Add(packages[i]);
+            } else if (_dto.Budget != null && sum * _dto.Participants <= _dto.Budget && _dto.ActivityType == null)
+            {
+                OkPackages.Add(packages[i]);
+            } else if (_dto.Budget == null && _dto.ActivityType != null && ActivityExists)
+            {
+                OkPackages.Add(packages[i]);
+            } else if (_dto.Budget == null && _dto.ActivityType == null)
+            {
+                OkPackages.Add(packages[i]);
+            }
+        }
+        return Ok(_mapper.Map<List<PackageResponseDto>>(OkPackages));
+    }
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<TripPackage>> GetPackage(int id)
+    {
+        _logger.LogInformation("Getting package by id");
+        var package = await _context.TripPackages
+            .Include(t => t.Trips)
+            .ThenInclude(t => t.Photos)
+            .Include(t => t.Trips)
+            .ThenInclude(t => t.ActivityTypes)
+            .FirstOrDefaultAsync(p => p.Id == id);
+        return Ok(_mapper.Map<PackageResponseDto>(package));
     }
 }

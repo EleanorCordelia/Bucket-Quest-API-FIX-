@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BucketQuestAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BucketQuestAPI.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250109121956_IntitialCreate")]
+    partial class IntitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,47 +70,6 @@ namespace BucketQuestAPI.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
-                });
-
-            modelBuilder.Entity("BucketQuestAPI.Entities.Booking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BookerId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ContactEmail")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContactName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContactPhone")
-                        .HasColumnType("text");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<int>("Participants")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TotalPrice")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TripPackageId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookerId");
-
-                    b.HasIndex("TripPackageId");
-
-                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("BucketQuestAPI.Entities.Photo", b =>
@@ -218,21 +180,6 @@ namespace BucketQuestAPI.Data.Migrations
                         .HasForeignKey("TripsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BucketQuestAPI.Entities.Booking", b =>
-                {
-                    b.HasOne("BucketQuestAPI.Entities.Account", "Booker")
-                        .WithMany()
-                        .HasForeignKey("BookerId");
-
-                    b.HasOne("BucketQuestAPI.Entities.TripPackage", "TripPackage")
-                        .WithMany()
-                        .HasForeignKey("TripPackageId");
-
-                    b.Navigation("Booker");
-
-                    b.Navigation("TripPackage");
                 });
 
             modelBuilder.Entity("BucketQuestAPI.Entities.Photo", b =>

@@ -1,31 +1,17 @@
-using System.ComponentModel.DataAnnotations;
-namespace BucketQuestAPI.DTOs
+using Microsoft.AspNetCore.Mvc;
+
+namespace BucketQuestAPI.DTOs;
+
+public class PackageSearchDto
 {
-    public class PackageSearchDto
-    {
-        public string? Name { get; set; }
-        public string? Location { get; set; }
-
-        public int? MinPrice { get; set; }
-
-        public int? MaxPrice { get; set; }
-
-        public string? Activity { get; set; }
-
-        public int? MinParticipantLimit { get; set; }
-
-        public int? MaxParticipantLimit { get; set; }
-
-        public DateOnly? DataRangeStart { get; set; }
-
-        public DateOnly? DataRangeEnd { get; set; }
-
-        public TimeOnly? ActivityTimeStart { get; set; }
-
-        public TimeOnly? ActivityTimeEnd { get; set; }
-
-        public int? MinDifficulty { get; set; }
-
-        public int? MaxDifficulty { get; set; }
-    }
+    [FromQuery(Name = "name")]
+    public string? Name { get; set; }
+    [FromQuery(Name = "location")]
+    public string? Location { get; set; }
+    [FromQuery(Name = "budget")]
+    public int? Budget { get; set; }
+    [FromQuery(Name = "activity_type")]
+    public int? ActivityType { get; set; }
+    [FromQuery(Name = "participants")]
+    public int Participants { get; set; } = 1;
 }
