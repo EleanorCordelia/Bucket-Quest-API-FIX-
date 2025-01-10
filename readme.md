@@ -1,17 +1,22 @@
 # API Documentation for BucketQuest
+
 ---
 
 ## Deskripsi
+
 ---
+
 BucketQuest adalah platform B2C pihak ketiga yang menghubungkan traveler dengan berbagai layanan lokal untuk mewujudkan bucket list liburan impian. Melalui BucketQuest, pengguna bisa dengan mudah merencanakan perjalanan lengkap dari pemesanan jeep (wisata gunung), selimut, peralatan snorkeling dan diving (wisata pantai), jasa foto, hingga guide dan porter(naik gunung), dan lainnya. Mulai dari mendaki gunung, diving, snorkeling, memancing, hingga mencari teman perjalanan. Sehingga kalian tidak perlu lagi mencari informasi trip diving(or paket liburan lainnya) mana yang punya view tercantik dan worth it, tinggal sekali klik, semua jadi!
 
 ## Links
+
 ---
-- [Website BucketQuest](https://shadcn-bucket-q.vercel.app/)
-- [API Documentation Swagger](https://bucketquestapi.fly.dev/swagger)
-- [Dokumen Laporan](https://docs.google.com/document/d/1LzBoLUOFgIyAsLhw8onxt2fC7WIekV9sXJSUVrL3bgM/edit?usp=sharing)
-- [Repo Frontend](https://github.com/EleanorCordelia/Bucket-Quest.git)
-- [Backend Link api.izinsakit.site](https://api.izinsakit.site)
+
+- 🔗[Website BucketQuest](https://shadcn-bucket-q.vercel.app/)
+- 🔗[API Documentation Swagger](https://bucketquestapi.fly.dev/swagger)
+- 🔗[Dokumen Laporan](https://docs.google.com/document/d/1LzBoLUOFgIyAsLhw8onxt2fC7WIekV9sXJSUVrL3bgM/edit?usp=sharing)
+- 🔗[Repo Frontend](https://github.com/EleanorCordelia/Bucket-Quest.git)
+- 🔗[Backend Link api.izinsakit.site](https://api.izinsakit.site)
 
 ## Endpoints  
 
@@ -92,3 +97,69 @@ API ini akan mengembalikan kode kesalahan berikut jika terjadi masalah:
 * `401 Unauthorized`: Token akses tidak valid atau tidak ada.
 * `404 Not Found`: Endpoint tidak ditemukan.
 * `500 Internal Server Error`: Terjadi kesalahan di server.
+
+## Example Responses
+
+User Login
+Endpoint
+POST /api/Account/login
+
+Request Body
+json
+Copy code
+{
+  "email": "string",
+  "password": "string"
+}
+Success Response (200 OK)
+
+Error Response (400 Bad Request)
+
+Activity
+Endpoint
+GET /api/Activity
+
+Success Response (200 OK)
+
+Booking
+Endpoint
+POST /api/Booking
+
+Request Body
+json
+Copy code
+{
+  "contactName": "string",
+  "contactEmail": "string",
+  "contactPhone": "string",
+  "packageId": 0,
+  "participants": 0,
+  "date": "string"
+}
+Success Response (200 OK)
+
+Package
+Endpoint
+GET /api/Package
+
+Success Response (200 OK)
+
+Package Search
+Endpoint
+GET /api/Package/search
+
+Query Parameters
+name: string
+location: string
+budget: integer
+activity_type: string
+participants: integer
+Success Response (200 OK)
+
+Package by ID
+Endpoint
+GET /api/Package/{id}
+
+Path Parameter
+id: integer (required)
+Success Response (200 OK)
