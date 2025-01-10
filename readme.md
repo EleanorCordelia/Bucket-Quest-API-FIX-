@@ -1,3 +1,18 @@
+# API Documentation for BucketQuest
+---
+
+## Deskripsi
+---
+BucketQuest adalah platform B2C pihak ketiga yang menghubungkan traveler dengan berbagai layanan lokal untuk mewujudkan bucket list liburan impian. Melalui BucketQuest, pengguna bisa dengan mudah merencanakan perjalanan lengkap dari pemesanan jeep (wisata gunung), selimut, peralatan snorkeling dan diving (wisata pantai), jasa foto, hingga guide dan porter(naik gunung), dan lainnya. Mulai dari mendaki gunung, diving, snorkeling, memancing, hingga mencari teman perjalanan. Sehingga kalian tidak perlu lagi mencari informasi trip diving(or paket liburan lainnya) mana yang punya view tercantik dan worth it, tinggal sekali klik, semua jadi!
+
+## Links
+---
+- [Website BucketQuest](https://shadcn-bucket-q.vercel.app/)
+- [API Documentation Swagger](https://bucketquestapi.fly.dev/swagger)
+- [Dokumen Laporan](https://docs.google.com/document/d/1LzBoLUOFgIyAsLhw8onxt2fC7WIekV9sXJSUVrL3bgM/edit?usp=sharing)
+- [Repo Frontend](https://github.com/EleanorCordelia/Bucket-Quest.git)
+- [Backend Link api.izinsakit.site](https://api.izinsakit.site)
+
 ## Endpoints  
 
 ### 1. Get All Activities  
