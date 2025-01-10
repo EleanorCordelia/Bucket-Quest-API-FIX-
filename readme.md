@@ -16,7 +16,7 @@ BucketQuest adalah platform B2C pihak ketiga yang menghubungkan traveler dengan 
 - 🔗[API Documentation Swagger](https://bucketquestapi.fly.dev/swagger)
 - 🔗[Dokumen Laporan](https://docs.google.com/document/d/1LzBoLUOFgIyAsLhw8onxt2fC7WIekV9sXJSUVrL3bgM/edit?usp=sharing)
 - 🔗[Repo Frontend](https://github.com/EleanorCordelia/Bucket-Quest.git)
-- 🔗[Backend Link api.izinsakit.site](https://api.izinsakit.site)
+- 🔗[Backend Link]
 
 ## Endpoints  
 
