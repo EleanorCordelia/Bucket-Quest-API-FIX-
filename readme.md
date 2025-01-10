@@ -100,66 +100,13 @@ API ini akan mengembalikan kode kesalahan berikut jika terjadi masalah:
 
 ## Example Responses
 
-User Login
-Endpoint
-POST /api/Account/login
+# API Documentation
 
-Request Body
-json
-Copy code
+## User Registration Response
+
+### Success Response (201 Created)
+```json
 {
-  "email": "string",
-  "password": "string"
+  "message": "User registered successfully"
 }
-Success Response (200 OK)
 
-Error Response (400 Bad Request)
-
-Activity
-Endpoint
-GET /api/Activity
-
-Success Response (200 OK)
-
-Booking
-Endpoint
-POST /api/Booking
-
-Request Body
-json
-Copy code
-{
-  "contactName": "string",
-  "contactEmail": "string",
-  "contactPhone": "string",
-  "packageId": 0,
-  "participants": 0,
-  "date": "string"
-}
-Success Response (200 OK)
-
-Package
-Endpoint
-GET /api/Package
-
-Success Response (200 OK)
-
-Package Search
-Endpoint
-GET /api/Package/search
-
-Query Parameters
-name: string
-location: string
-budget: integer
-activity_type: string
-participants: integer
-Success Response (200 OK)
-
-Package by ID
-Endpoint
-GET /api/Package/{id}
-
-Path Parameter
-id: integer (required)
-Success Response (200 OK)
