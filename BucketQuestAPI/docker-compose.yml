@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  api:
+    container_name: api
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/api
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/key.json
+      - DATABASE_URL=Server={bquest};Port={5432};User Id={bquest};Password={bquest};Database={bquest};
+    depends_on:
+      - postgres-bquest
+    networks:
+      - dotnet_api
+  postgres-bquest:
+    image: postgres:12.2
+    container_name: postgres-bquest
+    restart: always
+    environment:
+      POSTGRES_USER: bquest
+      POSTGRES_PASSWORD: bquest
+      POSTGRES_DB: bquest
+    ports:
+      - "5432:5432"
+    volumes:
+      - psql-bquest:/var/lib/postgresql/data
+    networks:
+      - dotnet_api
+
+networks:
+  dotnet_api:
+volumes:
+  psql-bquest:
